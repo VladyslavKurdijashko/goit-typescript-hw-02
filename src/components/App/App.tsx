@@ -1,4 +1,5 @@
-
+// src/components/App/App.tsx
+import React from 'react';
 import { useState, useEffect } from "react";
 import axios from "axios";
 import SearchBar from "../SearchBar/SearchBar";
@@ -7,19 +8,20 @@ import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "../ImageModal/ImageModal";
+import { Image } from "../../types"; // Імпорт типу
 import "./App.module.css";
 
 const API_KEY = "uY5EEfXXV_uuS72o0t1OINkwXvUGkEAu57vFRxxEW6s";
 const BASE_URL = "https://api.unsplash.com/search/photos";
 
-const App = () => {
-  const [query, setQuery] = useState("");
-  const [images, setImages] = useState([]);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [totalPages, setTotalPages] = useState(0);
+const App: React.FC = () => {
+  const [query, setQuery] = useState<string>("");
+  const [images, setImages] = useState<Image[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   useEffect(() => {
     if (!query) return;
@@ -28,7 +30,7 @@ const App = () => {
       setIsLoading(true);
 
       try {
-        const response = await axios.get(`${BASE_URL}`, {
+        const response = await axios.get(BASE_URL, {
           params: {
             query,
             page,
@@ -37,7 +39,16 @@ const App = () => {
           },
         });
 
-        const fetchedImages = response.data.results;
+        const fetchedImages: Image[] = response.data.results.map((img: any) => ({
+          id: img.id,
+          urls: {
+            small: img.urls.small,
+            regular: img.urls.regular || img.urls.small, // Використання small, якщо regular відсутня
+          },
+          alt_description: img.alt_description,
+          description: img.description,
+        }));
+
         setImages((prevImages) => [...prevImages, ...fetchedImages]);
         setTotalPages(response.data.total_pages);
       } catch (err) {
@@ -51,7 +62,7 @@ const App = () => {
     fetchImages();
   }, [query, page]);
 
-  const handleSearch = (newQuery) => {
+  const handleSearch = (newQuery: string) => {
     if (newQuery === query) return;
     setQuery(newQuery);
     setImages([]);
@@ -63,7 +74,7 @@ const App = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  const openModal = (image) => {
+  const openModal = (image: Image) => {
     setSelectedImage(image);
   };
 
