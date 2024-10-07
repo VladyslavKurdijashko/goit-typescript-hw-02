@@ -1,6 +1,4 @@
-
-import React from 'react';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SearchBar from "../SearchBar/SearchBar";
 import ImageGallery from "../ImageGallery/ImageGallery";
@@ -8,7 +6,7 @@ import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "../ImageModal/ImageModal";
-import { Image } from "../../types";
+import { Image, ApiResponse } from "../../types";
 import "./App.module.css";
 
 const API_KEY = "uY5EEfXXV_uuS72o0t1OINkwXvUGkEAu57vFRxxEW6s";
@@ -30,7 +28,7 @@ const App: React.FC = () => {
       setIsLoading(true);
 
       try {
-        const response = await axios.get(BASE_URL, {
+        const response = await axios.get<ApiResponse>(BASE_URL, {
           params: {
             query,
             page,
@@ -39,14 +37,14 @@ const App: React.FC = () => {
           },
         });
 
-        const fetchedImages: Image[] = response.data.results.map((img: any) => ({
+        const fetchedImages: Image[] = response.data.results.map((img) => ({
           id: img.id,
           urls: {
             small: img.urls.small,
             regular: img.urls.regular || img.urls.small,
           },
-          alt_description: img.alt_description,
-          description: img.description,
+          alt_description: img.alt_description || "No description",
+          description: img.description || "",
         }));
 
         setImages((prevImages) => [...prevImages, ...fetchedImages]);

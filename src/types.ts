@@ -7,3 +7,9 @@ export interface Image {
   alt_description: string;
   description?: string;
 }
+
+export interface ApiResponse {
+  total: number;
+  total_pages: number;
+  results: Image[];
+}
