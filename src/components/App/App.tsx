@@ -1,4 +1,4 @@
-// src/components/App/App.tsx
+
 import React from 'react';
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -8,7 +8,7 @@ import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "../ImageModal/ImageModal";
-import { Image } from "../../types"; // Імпорт типу
+import { Image } from "../../types";
 import "./App.module.css";
 
 const API_KEY = "uY5EEfXXV_uuS72o0t1OINkwXvUGkEAu57vFRxxEW6s";
@@ -43,7 +43,7 @@ const App: React.FC = () => {
           id: img.id,
           urls: {
             small: img.urls.small,
-            regular: img.urls.regular || img.urls.small, // Використання small, якщо regular відсутня
+            regular: img.urls.regular || img.urls.small,
           },
           alt_description: img.alt_description,
           description: img.description,

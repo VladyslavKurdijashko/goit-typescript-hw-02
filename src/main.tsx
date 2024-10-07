@@ -1,4 +1,4 @@
-import React from 'react'; // Додайте імпорт
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App/App';
 

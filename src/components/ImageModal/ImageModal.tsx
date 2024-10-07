@@ -1,22 +1,42 @@
-// src/components/ImageModal/ImageModal.tsx
+
 import React from 'react';
-import { Image } from "../../types"; // Імпорт типу
+import Modal from 'react-modal';
+import { Image } from '../../types';
 
 interface ImageModalProps {
   isOpen: boolean;
   onClose: () => void;
-  image: Image | null; // Використання спільного типу
+  image: Image | null;
 }
+
+
+Modal.setAppElement('#root');
 
 const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, image }) => {
   if (!image) return null;
 
   return (
-    <div>
-      <h2>{image.alt_description}</h2>
-      <img src={image.urls.regular} alt={image.alt_description} />
-      <button onClick={onClose}>Close</button>
-    </div>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      contentLabel="Image Modal"
+      style={{
+        content: {
+          top: '50%',
+          left: '50%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+        },
+      }}
+    >
+      <div>
+        {/* <h2>{image.alt_description}</h2> */}
+        <img src={image.urls.regular} alt={image.alt_description} />
+        {/* <button onClick={onClose}>Close</button> */}
+      </div>
+    </Modal>
   );
 };
 
